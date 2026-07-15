@@ -57,3 +57,11 @@ if category_profits:
     average_profit = sum(category_profits.values()) / len(category_profits)
 else:
     average_profit = 0
+
+
+
+filtered_categories = filter(lambda item: item[1] > average_profit, category_profits.items())
+sorted_categories = sorted(filtered_categories, key=lambda item: item[1], reverse=True)
+top_categories = {category: round(profit, 2) for category, profit in sorted_categories}
+with open("top_categories.json", "w", encoding="utf-8") as json_file:
+    json.dump(top_categories, json_file, ensure_ascii=False, indent=4)
