@@ -29,7 +29,7 @@ for transaction in sales:
     region = transaction["region"]
     revenue = transaction["revenue"]
 
-    tariff = tariffs.get(region, 0.0)
+    tariff = tariffs.get(region, 0)
     net_profit = revenue - (revenue * (tariff / 100))
     transaction["net_profit"] = round(net_profit, 2)
 
@@ -40,3 +40,20 @@ if sales:
         writer = csv.DictWriter(output_file, fieldnames=column_names)
         writer.writeheader()
         writer.writerows(sales)
+
+
+category_profits = {}
+
+for transaction in sales:
+    category = transaction["product_category"]
+    net_profit = transaction["net_profit"]
+
+    if category not in category_profits:
+        category_profits[category] = 0
+
+    category_profits[category] += net_profit
+
+if category_profits:
+    average_profit = sum(category_profits.values()) / len(category_profits)
+else:
+    average_profit = 0
