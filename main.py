@@ -23,3 +23,20 @@ with open("regional_tariffs.json", "r", encoding="utf-8") as json_file:
 
 for region, tariff in tariffs.items():
     tariffs[region] = clean_number(tariff, float)
+
+
+for transaction in sales:
+    region = transaction["region"]
+    revenue = transaction["revenue"]
+
+    tariff = tariffs.get(region, 0.0)
+    net_profit = revenue - (revenue * (tariff / 100))
+    transaction["net_profit"] = round(net_profit, 2)
+
+if sales:
+    column_names = list(sales[0].keys())
+
+    with open("cleaned_sales_updated.csv", "w", newline="", encoding="utf-8") as output_file:
+        writer = csv.DictWriter(output_file, fieldnames=column_names)
+        writer.writeheader()
+        writer.writerows(sales)
