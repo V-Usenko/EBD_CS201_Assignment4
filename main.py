@@ -65,3 +65,22 @@ sorted_categories = sorted(filtered_categories, key=lambda item: item[1], revers
 top_categories = {category: round(profit, 2) for category, profit in sorted_categories}
 with open("top_categories.json", "w", encoding="utf-8") as json_file:
     json.dump(top_categories, json_file, ensure_ascii=False, indent=4)
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+dataframe = pd.DataFrame(top_categories.items(), columns=["product_category", "net_profit"])
+print(dataframe)
+
+if not dataframe.empty:
+    plt.figure(figsize=(12, 8))
+    plt.bar(dataframe["product_category"],dataframe["net_profit"], color="pink")
+
+    plt.title("Чистий прибуток топ-категорій")
+    plt.xlabel("Категорія товарів")
+    plt.ylabel("Сумарний чистий прибуток")
+
+    plt.show()
